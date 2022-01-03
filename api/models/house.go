@@ -16,7 +16,7 @@ type House struct {
     Rooms    int    `gorm:"not null"                 json:"rooms"`
 	AvailableRooms    int    `gorm:"not null"                 json:"available_rooms"`
 	BathRooms    int    `gorm:"not null"                 json:"bathrooms"`
-    Price    double `gorm:"not null"        json:"price"`
+    Price    int `gorm:"not null"        json:"price"`
 	LongLat    string    `gorm:"not null"                 json:"long_lat"`
     CreatedBy   User   `gorm:"foreignKey:UserID;"       json:"-"`
     UserID      uint   `gorm:"not null"                 json:"user_id"`
@@ -26,8 +26,6 @@ func (v *House) Prepare() {
     v.HouseType = strings.TrimSpace(v.HouseType)
     v.Description = strings.TrimSpace(v.Description)
     v.Location = strings.TrimSpace(v.Location)
-    v.Rooms = strings.TrimSpace(v.Rooms)
-	v.BathRooms = strings.TrimSpace(v.BathRooms)
     v.CreatedBy = User{}
 }
 
@@ -64,54 +62,46 @@ func (v *House) Save(db *gorm.DB) (*House, error) {
     return v, nil
 }
 
-func (v *House) GetHouse(db *gorm.DB) (*House, error) {
-    house := &House{}
-    if err := db.Debug().Table("houses").Where("name = ?", v.Name).First(house).Error; err != nil {
-        return nil, err
-    }
-    return house, nil
-}
-
-func GetHouses(db *gorm.DB) (*[]house, error) {
-    houses := []house{}
+func GetHouses(db *gorm.DB) (*[]House, error) {
+    houses := []House{}
     if err := db.Debug().Table("houses").Find(&houses).Error; err != nil {
-        return &[]house{}, err
+        return &[]House{}, err
     }
     return &houses, nil
 }
 
-func GetHousesByLandLord(id int, db *gorm.DB) (*[]house, error){
-	houses := []house{}
+func GetHousesByLandLord(id uint, db *gorm.DB) (*[]House, error){
+	houses := []House{}
 	if err := db.Debug().Table("houses").Where("userid = ?", id).Find(&houses).Error; err != nil {
-		return &[]house{}, error
+		return &[]House{}, err
 	}
 
 	return &houses, nil
 }
 
-func GetHouseById(id int, db *gorm.DB) (*house, error) {
-    house := &house{}
+func GetHouseById(id int, db *gorm.DB) (*House, error) {
+    house := &House{}
     if err := db.Debug().Table("houses").Where("id = ?", id).First(house).Error; err != nil {
         return nil, err
     }
     return house, nil
 }
 
-func (v *house) UpdateHouse(id int, db *gorm.DB) (*house, error) {
-    if err := db.Debug().Table("houses").Where("id = ?", id).Updates(house{
+func (v *House) UpdateHouse(id int, db *gorm.DB) (*House, error) {
+    if err := db.Debug().Table("houses").Where("id = ?", id).Updates(House{
         HouseType:        v.HouseType,
         Description: v.Description,
         Location:    v.Location,
         Rooms:    v.Rooms,
 		BathRooms:	v.BathRooms,
         Price:    v.Price}).Error; err != nil {
-        return &house{}, err
+        return &House{}, err
     }
     return v, nil
 }
 
 func DeleteHouse(id int, db *gorm.DB) error {
-    if err := db.Debug().Table("houses").Where("id = ?", id).Delete(&house{}).Error; err != nil {
+    if err := db.Debug().Table("houses").Where("id = ?", id).Delete(&House{}).Error; err != nil {
         return err
     }
     return nil

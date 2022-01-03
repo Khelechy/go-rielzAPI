@@ -50,7 +50,7 @@ func (a *App) CreateHouse(w http.ResponseWriter, r *http.Request) {
     return
 }
 
-func (a *App) GetHouses(w http.ResponseWriter, r http.Request) {
+func (a *App) GetHouses(w http.ResponseWriter, r *http.Request) {
     houses, err := models.GetHouses(a.DB)
     if err != nil {
         responses.ERROR(w, http.StatusInternalServerError, err)
@@ -60,7 +60,7 @@ func (a *App) GetHouses(w http.ResponseWriter, r http.Request) {
     return
 }
 
-func (a *App) GetHousesByLandlord(w http.ResponseWriter, r http.Request) {
+func (a *App) GetHousesByLandlord(w http.ResponseWriter, r *http.Request) {
     user := r.Context().Value("userID").(float64)
     userID := uint(user)
     houses, err := models.GetHousesByLandLord(userID, a.DB)
@@ -72,9 +72,10 @@ func (a *App) GetHousesByLandlord(w http.ResponseWriter, r http.Request) {
     return
 }
 
-func (a *App) GetHouseById(w http.ResponseWriter, r http.Request){
-    var resp = map[string]interface{}{"status": "success", "message": "House fetched successfully"}
+func (a *App) GetHouseById(w http.ResponseWriter, r *http.Request){
+
     vars := mux.Vars(r)
+
     id, _ := strconv.Atoi(vars["id"])
 
     house, err := models.GetHouseById(id, a.DB)

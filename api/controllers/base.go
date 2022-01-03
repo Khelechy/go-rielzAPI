@@ -52,11 +52,11 @@ func (a *App) initializeRoutes() {
 	s := a.Router.PathPrefix("/api").Subrouter() // routes that require authentication
     s.Use(middlewares.AuthJwtVerify)
 
-    s.HandleFunc("/users", a.GetAllUsers).Methods("GET")
+    //s.HandleFunc("/users", a.GetAllUsers).Methods("GET")
     s.HandleFunc("/houses", a.CreateHouse).Methods("POST")
 	s.HandleFunc("/houses/landlord/{id:[0-9]+}", a.GetHousesByLandlord).Methods("GET")
-    s.HandleFunc("/houses/{id:[0-9]+}", a.UpdateVenue).Methods("PUT")
-    s.HandleFunc("/houses/{id:[0-9]+}", a.DeleteVenue).Methods("DELETE")
+    s.HandleFunc("/houses/{id:[0-9]+}", a.UpdateHouse).Methods("PUT")
+    s.HandleFunc("/houses/{id:[0-9]+}", a.DeleteHouse).Methods("DELETE")
 }
 
 func (a *App) RunServer() {
