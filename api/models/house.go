@@ -9,9 +9,9 @@ import (
 
 type House struct {
     gorm.Model
-    HouseType        string `gorm:"size:100;not null;unique" json:"house_type"`
+    HouseType        string `gorm:"size:100;not null;" json:"house_type"`
     State string `gorm:"not null"                 json:"state"`
-	Description 	string `gorm:"not null"			json:"description"`
+	Description 	string `gorm:"not null"         json:"description"`
     Location    string `gorm:"size:100;not null"        json:"location"`
     Rooms    int    `gorm:"not null"                 json:"rooms"`
 	AvailableRooms    int    `gorm:"not null"                 json:"available_rooms"`
@@ -72,7 +72,7 @@ func GetHouses(db *gorm.DB) (*[]House, error) {
 
 func GetHousesByLandLord(id uint, db *gorm.DB) (*[]House, error){
 	houses := []House{}
-	if err := db.Debug().Table("houses").Where("userid = ?", id).Find(&houses).Error; err != nil {
+	if err := db.Debug().Table("houses").Where("user_id = ?", id).Find(&houses).Error; err != nil {
 		return &[]House{}, err
 	}
 

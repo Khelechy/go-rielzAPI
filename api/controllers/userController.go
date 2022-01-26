@@ -5,6 +5,9 @@ import (
     "encoding/json"
     "io/ioutil"
     "net/http"
+    "strconv"
+
+    "github.com/gorilla/mux"
 
     "github.com/khelechy/rielzapi/api/models"
     "github.com/khelechy/rielzapi/api/responses"
@@ -106,5 +109,30 @@ func (a *App) Login(w http.ResponseWriter, r *http.Request) {
 
     resp["token"] = token
     responses.JSON(w, http.StatusOK, resp)
+    return
+}
+
+func (a *App) GetUsers(w http.ResponseWriter, r *http.Request) {
+    houses, err := models.GetAllUsers(a.DB)
+    if err != nil {
+        responses.ERROR(w, http.StatusInternalServerError, err)
+        return
+    }
+    responses.JSON(w, http.StatusOK, houses)
+    return
+}
+
+func (a *App) GetUserById(w http.ResponseWriter, r *http.Request){
+
+    vars := mux.Vars(r)
+
+    id, _ := strconv.Atoi(vars["id"])
+
+    user, err := models.GetUserById(id, a.DB)
+    if err != nil{
+        responses.ERROR(w, http.StatusInternalServerError, err)
+        return
+    }
+    responses.JSON(w, http.StatusOK, user)
     return
 }

@@ -72,6 +72,22 @@ func (a *App) GetHousesByLandlord(w http.ResponseWriter, r *http.Request) {
     return
 }
 
+func (a *App) GetHousesByLandlordId(w http.ResponseWriter, r *http.Request) {
+
+    vars := mux.Vars(r)
+
+    id, _ := strconv.Atoi(vars["id"])
+
+    userID := uint(id)
+    houses, err := models.GetHousesByLandLord(userID, a.DB)
+    if err != nil {
+        responses.ERROR(w, http.StatusInternalServerError, err)
+        return
+    }
+    responses.JSON(w, http.StatusOK, houses)
+    return
+}
+
 func (a *App) GetHouseById(w http.ResponseWriter, r *http.Request){
 
     vars := mux.Vars(r)

@@ -47,14 +47,18 @@ func (a *App) initializeRoutes() {
     a.Router.HandleFunc("/login", a.Login).Methods("POST")
 	a.Router.HandleFunc("/api/houses", a.GetHouses).Methods("GET")
 	a.Router.HandleFunc("/api/houses/{id:[0-9]+}", a.GetHouseById).Methods("GET")
+    a.Router.HandleFunc("/api/users", a.GetUsers).Methods("GET")
+    a.Router.HandleFunc("/api/users/{id:[0-9]+}", a.GetUserById).Methods("GET")
+    a.Router.HandleFunc("api/houses/landlord/{id:[0-9]+}", a.GetHousesByLandlordId).Methods("GET")
 	
 
 	s := a.Router.PathPrefix("/api").Subrouter() // routes that require authentication
     s.Use(middlewares.AuthJwtVerify)
 
-    //s.HandleFunc("/users", a.GetAllUsers).Methods("GET")
+
     s.HandleFunc("/houses", a.CreateHouse).Methods("POST")
-	s.HandleFunc("/houses/landlord/{id:[0-9]+}", a.GetHousesByLandlord).Methods("GET")
+    s.HandleFunc("/houses/landlord/", a.GetHousesByLandlord).Methods("GET")
+    
     s.HandleFunc("/houses/{id:[0-9]+}", a.UpdateHouse).Methods("PUT")
     s.HandleFunc("/houses/{id:[0-9]+}", a.DeleteHouse).Methods("DELETE")
 }
