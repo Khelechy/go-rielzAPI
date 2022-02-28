@@ -33,7 +33,7 @@ func (a *App) Initialize(DbHost, DbPort, DbUser, DbName, DbPassword string) {
         fmt.Printf("We are connected to the database %s", DbName)
     }
 
-    a.DB.Debug().AutoMigrate(&models.User{}, &models.House{}) //database migration
+    a.DB.Debug().AutoMigrate(&models.User{}, &models.House{}, &models.Tenant{}) //database migration
 
     a.Router = mux.NewRouter().StrictSlash(true)
     a.initializeRoutes()
@@ -49,7 +49,9 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/api/houses/{id:[0-9]+}", a.GetHouseById).Methods("GET")
     a.Router.HandleFunc("/api/users", a.GetUsers).Methods("GET")
     a.Router.HandleFunc("/api/users/{id:[0-9]+}", a.GetUserById).Methods("GET")
-    a.Router.HandleFunc("api/houses/landlord/{id:[0-9]+}", a.GetHousesByLandlordId).Methods("GET")
+    a.Router.HandleFunc("/api/houses/landlord/{id:[0-9]+}", a.GetHousesByLandlordId).Methods("GET")
+    a.Router.HandleFunc("/api/houses/{state}", a.GetHousesByState).Methods("GET")
+    a.Router.HandleFunc("/api/houses/tenant", a.AddTenant).Methods("POST")
 	
 
 	s := a.Router.PathPrefix("/api").Subrouter() // routes that require authentication
@@ -57,6 +59,7 @@ func (a *App) initializeRoutes() {
 
 
     s.HandleFunc("/houses", a.CreateHouse).Methods("POST")
+    //s.HandleFunc("/houses/tenant", a.AddTenant).Methods("POST")
     s.HandleFunc("/houses/landlord/", a.GetHousesByLandlord).Methods("GET")
     
     s.HandleFunc("/houses/{id:[0-9]+}", a.UpdateHouse).Methods("PUT")

@@ -79,6 +79,15 @@ func GetHousesByLandLord(id uint, db *gorm.DB) (*[]House, error){
 	return &houses, nil
 }
 
+func GetHousesByState(name string, db *gorm.DB) (*[]House, error){
+	houses := []House{}
+	if err := db.Debug().Table("houses").Where("state = ?", name).Find(&houses).Error; err != nil {
+		return &[]House{}, err
+	}
+
+	return &houses, nil
+}
+
 func GetHouseById(id int, db *gorm.DB) (*House, error) {
     house := &House{}
     if err := db.Debug().Table("houses").Where("id = ?", id).First(house).Error; err != nil {
@@ -93,6 +102,7 @@ func (v *House) UpdateHouse(id int, db *gorm.DB) (*House, error) {
         Description: v.Description,
         Location:    v.Location,
         Rooms:    v.Rooms,
+        AvailableRooms: v.AvailableRooms,
 		BathRooms:	v.BathRooms,
         Price:    v.Price}).Error; err != nil {
         return &House{}, err
