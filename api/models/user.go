@@ -126,3 +126,14 @@ func GetUserById(id int, db *gorm.DB) (*User, error) {
     }
     return user, nil
 }
+
+func (v *User) UpdateUser(id int, db *gorm.DB) (*User, error) {
+    if err := db.Debug().Table("users").Where("id = ?", id).Updates(User{
+        FirstName:        v.FirstName,
+        LastName: v.LastName,
+        PhoneNumber:    v.PhoneNumber,
+        Email:    v.Email}).Error; err != nil {
+        return &User{}, err
+    }
+    return v, nil
+}

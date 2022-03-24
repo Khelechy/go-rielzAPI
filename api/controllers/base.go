@@ -60,7 +60,8 @@ func (a *App) initializeRoutes() {
     s.HandleFunc("/houses", a.CreateHouse).Methods("POST")
     s.HandleFunc("/houses/tenant", a.AddTenant).Methods("POST")
     s.HandleFunc("/houses/landlord/", a.GetHousesByLandlord).Methods("GET")
-    
+    s.HandleFunc("/api/users/{id:[0-9]+}", a.GetUserById).Methods("GET")
+    s.HandleFunc("/users/{id:[0-9]+}", a.UpdateUser).Methods("PUT")
     s.HandleFunc("/houses/{id:[0-9]+}", a.UpdateHouse).Methods("PUT")
     s.HandleFunc("/houses/{id:[0-9]+}", a.DeleteHouse).Methods("DELETE")
 }

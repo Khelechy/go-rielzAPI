@@ -136,3 +136,46 @@ func (a *App) GetUserById(w http.ResponseWriter, r *http.Request){
     responses.JSON(w, http.StatusOK, user)
     return
 }
+
+func (a *App) UpdateUser(w http.ResponseWriter, r *http.Request) {
+    var resp = map[string]interface{}{"status": "success", "message": "User updated successfully"}
+
+    vars := mux.Vars(r)
+
+    myUser := r.Context().Value("userID").(float64)
+    userID := uint(myUser)
+
+    id, _ := strconv.Atoi(vars["id"])
+
+    user, err := models.GetUserById(id, a.DB)
+
+    if user.ID != userID {
+        resp["status"] = "failed"
+        resp["message"] = "Unauthorized user update"
+        responses.JSON(w, http.StatusUnauthorized, resp)
+        return
+    }
+
+    body, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        responses.ERROR(w, http.StatusBadRequest, err)
+        return
+    }
+
+    userUpdate := models.User{}
+    if err = json.Unmarshal(body, &userUpdate); err != nil {
+        responses.ERROR(w, http.StatusBadRequest, err)
+        return
+    }
+
+    userUpdate.Prepare()
+
+    _, err = userUpdate.UpdateUser(id, a.DB)
+    if err != nil {
+        responses.ERROR(w, http.StatusInternalServerError, err)
+        return
+    }
+
+    responses.JSON(w, http.StatusOK, resp)
+    return
+}
