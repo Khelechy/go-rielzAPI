@@ -14,6 +14,11 @@ import (
     "github.com/khelechy/rielzapi/utils"
 )
 
+// signup godoc
+// @Summary Registration for landlords
+// @Accept  json
+// @Produce  json
+// @Router /signup [post]
 // UserSignUp controller for creating new users
 func (a *App) UserSignUp(w http.ResponseWriter, r *http.Request) {
     var resp = map[string]interface{}{"status": "success", "message": "Registered successfully"}
@@ -56,6 +61,12 @@ func (a *App) UserSignUp(w http.ResponseWriter, r *http.Request) {
     return
 }
 
+
+// login godoc
+// @Summary Login for landlords
+// @Accept  json
+// @Produce  json
+// @Router /login [post]
 // Login signs in users
 func (a *App) Login(w http.ResponseWriter, r *http.Request) {
     var resp = map[string]interface{}{"status": "success", "message": "logged in"}
@@ -112,6 +123,11 @@ func (a *App) Login(w http.ResponseWriter, r *http.Request) {
     return
 }
 
+// GetUsers godoc
+// @Summary Get All landlords
+// @Accept  json
+// @Produce  json
+// @Router /api/users [post]
 func (a *App) GetUsers(w http.ResponseWriter, r *http.Request) {
     houses, err := models.GetAllUsers(a.DB)
     if err != nil {
@@ -122,6 +138,12 @@ func (a *App) GetUsers(w http.ResponseWriter, r *http.Request) {
     return
 }
 
+
+// GetUsers by Id godoc
+// @Summary Get All landlords
+// @Accept  json
+// @Produce  json
+// @Router /api/users/id [get]
 func (a *App) GetUserById(w http.ResponseWriter, r *http.Request){
 
     vars := mux.Vars(r)
@@ -137,6 +159,11 @@ func (a *App) GetUserById(w http.ResponseWriter, r *http.Request){
     return
 }
 
+// Update User godoc
+// @Summary Update landlords
+// @Accept  json
+// @Produce  json
+// @Router /api/users/id [put]
 func (a *App) UpdateUser(w http.ResponseWriter, r *http.Request) {
     var resp = map[string]interface{}{"status": "success", "message": "User updated successfully"}
 

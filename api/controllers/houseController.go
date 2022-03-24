@@ -12,7 +12,11 @@ import (
     "github.com/khelechy/rielzapi/api/responses"
 )
 
-// CreateHouse parses request, validates data and saves the new house
+// CreateHouse godoc
+// @Summary Create House for landlord
+// @Accept  json
+// @Produce  json
+// @Router /api/houses [post]
 func (a *App) CreateHouse(w http.ResponseWriter, r *http.Request) {
     var resp = map[string]interface{}{"status": "success", "message": "House successfully created"}
 
@@ -50,6 +54,11 @@ func (a *App) CreateHouse(w http.ResponseWriter, r *http.Request) {
     return
 }
 
+// GetHouses godoc
+// @Summary Get All Houses
+// @Accept  json
+// @Produce  json
+// @Router /api/houses [get]
 func (a *App) GetHouses(w http.ResponseWriter, r *http.Request) {
     houses, err := models.GetHouses(a.DB)
     if err != nil {
@@ -60,6 +69,11 @@ func (a *App) GetHouses(w http.ResponseWriter, r *http.Request) {
     return
 }
 
+// GetHouses By Landlord godoc
+// @Summary Get All Houses By Landlord
+// @Accept  json
+// @Produce  json
+// @Router /api/houses/landlord [get]
 func (a *App) GetHousesByLandlord(w http.ResponseWriter, r *http.Request) {
     user := r.Context().Value("userID").(float64)
     userID := uint(user)
@@ -72,6 +86,11 @@ func (a *App) GetHousesByLandlord(w http.ResponseWriter, r *http.Request) {
     return
 }
 
+// GetHouses By Landlord godoc
+// @Summary Get All Houses By Landlord
+// @Accept  json
+// @Produce  json
+// @Router /api/houses/landlord/id [get]
 func (a *App) GetHousesByLandlordId(w http.ResponseWriter, r *http.Request) {
 
     vars := mux.Vars(r)
@@ -88,6 +107,12 @@ func (a *App) GetHousesByLandlordId(w http.ResponseWriter, r *http.Request) {
     return
 }
 
+
+// GetHouses By state godoc
+// @Summary Get All Houses By state
+// @Accept  json
+// @Produce  json
+// @Router /api/houses/state [get]
 func (a *App) GetHousesByState(w http.ResponseWriter, r *http.Request) {
 
     state := mux.Vars(r)["state"]
@@ -100,6 +125,11 @@ func (a *App) GetHousesByState(w http.ResponseWriter, r *http.Request) {
     return
 }
 
+// GetHouses
+// @Summary Get All Houses By Id
+// @Accept  json
+// @Produce  json
+// @Router /api/houses/id [get]
 func (a *App) GetHouseById(w http.ResponseWriter, r *http.Request){
 
     vars := mux.Vars(r)
@@ -115,6 +145,11 @@ func (a *App) GetHouseById(w http.ResponseWriter, r *http.Request){
     return
 }
 
+// AddTenant By Landlord godoc
+// @Summary Add Tenant By Landlord
+// @Accept  json
+// @Produce  json
+// @Router /api/houses/tenant [post]
 func (a *App) AddTenant(w http.ResponseWriter, r *http.Request){
     var resp = map[string]interface{}{"status": "success", "message": "Tenant added successfully"}
 
@@ -171,6 +206,11 @@ func (a *App) AddTenant(w http.ResponseWriter, r *http.Request){
     return
 }
 
+// UpdateHouse By Landlord godoc
+// @Summary Update Houses By Landlord
+// @Accept  json
+// @Produce  json
+// @Router /api/houses/id [put]
 func (a *App) UpdateHouse(w http.ResponseWriter, r *http.Request) {
     var resp = map[string]interface{}{"status": "success", "message": "House updated successfully"}
 
@@ -214,6 +254,11 @@ func (a *App) UpdateHouse(w http.ResponseWriter, r *http.Request) {
     return
 }
 
+// DeleteHouse By Landlord godoc
+// @Summary Delete house By Landlord
+// @Accept  json
+// @Produce  json
+// @Router /api/houses/id [delete]
 func (a *App) DeleteHouse(w http.ResponseWriter, r *http.Request) {
     var resp = map[string]interface{}{"status": "success", "message": "House deleted successfully"}
 

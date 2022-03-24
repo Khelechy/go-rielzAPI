@@ -10,6 +10,9 @@ import (
     "github.com/jinzhu/gorm"
     _ "github.com/jinzhu/gorm/dialects/postgres" //postgres
 
+    _ "github.com/khelechy/rielzapi/api/models/docs" 
+    httpSwagger "github.com/swaggo/http-swagger"
+
     "github.com/khelechy/rielzapi/api/middlewares"
 	"github.com/khelechy/rielzapi/api/models"
     "github.com/khelechy/rielzapi/api/responses"
@@ -39,9 +42,19 @@ func (a *App) Initialize(DbHost, DbPort, DbUser, DbName, DbPassword string) {
     a.initializeRoutes()
 }
 
+// @title Rielz API
+// @version 1.0
+// @description This is a simple real estate management service
+// @termsOfService http://swagger.io/terms/
+// @contact.name API Support
+// @contact.email soberkoder@swagger.io
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:5000
+// @BasePath /
 func (a *App) initializeRoutes() {
     a.Router.Use(middlewares.SetContentTypeMiddleware) // setting content-type to json
-
+    a.Router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
     a.Router.HandleFunc("/", home).Methods("GET")
     a.Router.HandleFunc("/register", a.UserSignUp).Methods("POST")
     a.Router.HandleFunc("/login", a.Login).Methods("POST")
@@ -72,5 +85,5 @@ func (a *App) RunServer() {
 }
 
 func home(w http.ResponseWriter, r *http.Request) { // this is the home route
-    responses.JSON(w, http.StatusOK, "Welcome To Ivents")
+    responses.JSON(w, http.StatusOK, "Welcome To RielzAPI")
 }
